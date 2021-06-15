@@ -1,0 +1,11 @@
+apiVersion: velero.io/v1
+kind: Backup
+metadata:
+  namespace: oadp-operator
+  name: example-backup
+spec:
+  storageLocation: default
+  snapshotVolumes: true
+  includedNamespaces:
+    - example-namespace
+

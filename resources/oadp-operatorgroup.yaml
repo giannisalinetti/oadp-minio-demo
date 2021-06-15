@@ -1,0 +1,12 @@
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  annotations:
+    olm.providedAPIs: Backup.v1.velero.io,BackupStorageLocation.v1.velero.io,DeleteBackupRequest.v1.velero.io,DownloadRequest.v1.velero.io,PodVolumeBackup.v1.velero.io,PodVolumeRestore.v1.velero.io,ResticRepository.v1.velero.io,Restore.v1.velero.io,Schedule.v1.velero.io,ServerStatusRequest.v1.velero.io,Velero.v1alpha1.konveyor.openshift.io,VolumeSnapshotLocation.v1.velero.io
+  generateName: oadp-operator-
+  name: oadp-operator
+  namespace: oadp-operator
+spec:
+  targetNamespaces:
+  - oadp-operator
+

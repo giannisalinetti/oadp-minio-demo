@@ -1,0 +1,35 @@
+apiVersion: konveyor.openshift.io/v1alpha1
+kind: Velero
+metadata:
+  name: example-velero
+  namespace: oadp-operator
+spec:
+  olm_managed: true
+  backup_storage_locations:
+    - config:
+        profile: default
+        region: minio
+        s3_url: https://minio-minio.apps.ocp4.rhocplab.com
+        s3_force_path_style: true
+        insecure_skip_tls_verify: true
+      credentials_secret_ref:
+        name: cloud-credentials
+        namespace: oadp-operator
+      name: default
+      object_storage:
+        bucket: example
+        prefix: velero
+      provider: aws
+  default_velero_plugins:
+    - aws
+    - csi
+    - openshift
+  velero_feature_flags: EnableCSI
+  enable_restic: true
+  volume_snapshot_locations:
+    - config:
+        profile: default
+        region: minio
+      name: default
+      provider: aws
+
