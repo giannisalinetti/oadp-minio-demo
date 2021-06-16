@@ -4,6 +4,14 @@ A demo repository to show how OADP works with a generic S3 backend (Minio).
 The purpose of this demo is purely to showcase the features of OADP using a simple
 backend during labs and workshops.
 
+[OADP](https://github.com/konveyor/oadp-operator) (OpenShift APIs for Data Protection) 
+is an operator that Red Hat has created to create backup and restore APIs in the 
+OpenShift cluster. OADP is based on Velero.
+
+[MinIO](https://github.com/minio/minio) is a High Performance Object Storage which 
+is API compatible with Amazon S3 cloud storage service.
+
+
 ## Install OADP from the OpenShift Console
 Install the OADP Operator from the Openshift's OperatorHub. Search for the operator using keywords like `oadp` or `velero`
 
@@ -180,6 +188,10 @@ The following kind of message will appear in the Velero logs:
 ```
 time="2021-06-15T18:24:29Z" level=info msg="Persistent volume is not a supported volume type for snapshots, skipping." backup=oadp-operator/example-backup logSource="pkg/backup/item_backupper.go:469" name=pvc-a101734c-f9eb-4f18-9936-57453a88b69c namespace= persistentVolume=pvc-a101734c-f9eb-4f18-9936-57453a88b69c resource=persistentvolumes
 ```
+
+## Links
+- https://access.redhat.com/articles/5456281
+- https://www.openshift.com/blog/hybrid-cloud-disaster-recovery-on-openshift
 
 ## Maintainers
 Gianni Salinetti <gsalinet@redhat.com>  
