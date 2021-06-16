@@ -244,12 +244,19 @@ spec:
   restorePVs: true
 ```
 
+Before creating the Restore CR, delete all the resources created in the 
+`example-namespace` to test the correct recreation.
+```
+oc delete all --all -n example-namespace
+```
+
 Apply the restore resource.
 ```
 oc apply -f resources/example-restore.yaml
 ```
 
-When the restore is completed you should see the following line in the Velero logs:
+When the restore is completed you should see the pods and resources recreated in 
+the namespace. Also, you should find the following line in the Velero logs:
 ```
 time="2021-06-16T07:52:04Z" level=info msg="restore completed" logSource="pkg/controller/restore_controller.go:480" restore=oadp-operator/restore
 ```
