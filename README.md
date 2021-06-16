@@ -1,6 +1,8 @@
 # OADP + Minio Demo
 
 A demo repository to show how OADP works with a generic S3 backend (Minio).
+The purpose of this demo is purely to showcase the features of OADP using a simple
+backend during labs and workshops.
 
 ## Install OADP from the OpenShift Console
 Install the OADP Operator from the Openshift's OperatorHub. Search for the operator using keywords like `oadp` or `velero`
@@ -145,6 +147,25 @@ mongodb   Bound    pvc-4eae7794-4117-4d37-969d-58702e757eac   1Gi        RWO    
 ```
 
 ## Create the backup resource
+The backup resource defines the backup parameteres, the storage location (which
+is the S3 backend configured in the Velero CR) and the included namespaces.
+It is also possible to configure exclusion lists.
+The `snapshotVolumes` boolean can be used to enable/disable the volume snapshots (this will
+imply a CSI storage driver).
+```
+apiVersion: velero.io/v1
+kind: Backup
+metadata:
+  namespace: oadp-operator
+  name: example-backup
+spec:
+  storageLocation: default
+  snapshotVolumes: true
+  includedNamespaces:
+    - example-namespace
+```
+
+Apply the backup resource.
 ```
 oc apply -f resources/example-backup.yaml
 ```
@@ -154,8 +175,12 @@ in the Minio console:
 
 ![Minio-Backup](docs/images/minio-example-backup.png)
 
-If the storage backend does not support CSI snapshots the volume snapshop will be skipped.
+**NOTE**: If the storage backend does not support CSI snapshots the volume snapshop will be skipped.
 The following kind of message will appear in the Velero logs:
 ```
 time="2021-06-15T18:24:29Z" level=info msg="Persistent volume is not a supported volume type for snapshots, skipping." backup=oadp-operator/example-backup logSource="pkg/backup/item_backupper.go:469" name=pvc-a101734c-f9eb-4f18-9936-57453a88b69c namespace= persistentVolume=pvc-a101734c-f9eb-4f18-9936-57453a88b69c resource=persistentvolumes
 ```
+
+## Maintainers
+Gianni Salinetti <gsalinet@redhat.com>  
+
