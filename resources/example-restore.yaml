@@ -2,7 +2,7 @@ apiVersion: velero.io/v1
 kind: Restore
 metadata:
   namespace: oadp-operator
-  name: restore
+  name: example-restore
 spec:
   backupName: example-backup
   includedNamespaces:

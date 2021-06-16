@@ -129,8 +129,45 @@ Create the Velero CR.
 ```
 oc apply -f resources/example-velero.yaml
 ```
+## Verify Installation
+Check if the Velero resources are all successfully installed:
+```
+$ oc get all -n oadp-operator
+NAME                                            READY   STATUS    RESTARTS   AGE
+pod/oadp-default-aws-registry-6fc6698db-gh45z   1/1     Running   0          33h
+pod/oadp-operator-85789d5949-2msqr              1/1     Running   0          24d
+pod/restic-9wdxz                                1/1     Running   0          33h
+pod/restic-dphxp                                1/1     Running   0          33h
+pod/restic-gt55r                                1/1     Running   0          33h
+pod/restic-hcb2m                                1/1     Running   0          33h
+pod/restic-mhpwk                                1/1     Running   0          33h
+pod/restic-s9282                                1/1     Running   0          33h
+pod/velero-5849fffd4-rf9hz                      1/1     Running   0          33h
 
-## Create a sample backup namespace
+NAME                                    TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/oadp-default-aws-registry-svc   ClusterIP   172.30.185.177   <none>        5000/TCP   33h
+
+NAME                    DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+daemonset.apps/restic   6         6         6       6            6           <none>          33h
+
+NAME                                        READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/oadp-default-aws-registry   1/1     1            1           33h
+deployment.apps/oadp-operator               1/1     1            1           141d
+deployment.apps/velero                      1/1     1            1           33h
+
+NAME                                                  DESIRED   CURRENT   READY   AGE
+replicaset.apps/oadp-default-aws-registry-6fc6698db   1         1         1       33h
+replicaset.apps/oadp-operator-8458865795              0         0         0       39d
+replicaset.apps/oadp-operator-85789d5949              1         1         1       37d
+replicaset.apps/velero-5849fffd4                      1         1         1       33h
+
+NAME                                                       HOST/PORT                                                              PATH   SERVICES                        PORT       TERMINATION   WILDCARD
+route.route.openshift.io/oadp-default-aws-registry-route   oadp-default-aws-registry-route-oadp-operator.apps.ocp4.rhocplab.com          oadp-default-aws-registry-svc   5000-tcp                 None
+```
+
+## Create a backup target namespace
+Create the new namespace and deploy a new appliaction. The follwing example uses
+an OpenShift template of NodeJS + MongoDB with persistency.
 ```
 oc new-project example-namespace
 oc new-app --template=nodejs-mongo-persistent
@@ -158,6 +195,8 @@ mongodb   Bound    pvc-4eae7794-4117-4d37-969d-58702e757eac   1Gi        RWO    
 The backup resource defines the backup parameteres, the storage location (which
 is the S3 backend configured in the Velero CR) and the included namespaces.
 It is also possible to configure exclusion lists.
+**IMPORTANT**: If no inclusions or exclusions are specified the Backup CR targets all the 
+cluster namespaces.
 The `snapshotVolumes` boolean can be used to enable/disable the volume snapshots (this will
 imply a CSI storage driver).
 ```
@@ -197,7 +236,7 @@ apiVersion: velero.io/v1
 kind: Restore
 metadata:
   namespace: oadp-operator
-  name: restore
+  name: example-restore
 spec:
   backupName: example-backup
   includedNamespaces:
