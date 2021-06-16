@@ -189,6 +189,32 @@ The following kind of message will appear in the Velero logs:
 time="2021-06-15T18:24:29Z" level=info msg="Persistent volume is not a supported volume type for snapshots, skipping." backup=oadp-operator/example-backup logSource="pkg/backup/item_backupper.go:469" name=pvc-a101734c-f9eb-4f18-9936-57453a88b69c namespace= persistentVolume=pvc-a101734c-f9eb-4f18-9936-57453a88b69c resource=persistentvolumes
 ```
 
+## Restore resources
+After the completion of backup test the restore using the Restore CR offered
+by OADP. The following example restores the content of the `example-namespace`:
+```
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  namespace: oadp-operator
+  name: restore
+spec:
+  backupName: example-backup
+  includedNamespaces:
+    - example-namespace
+  restorePVs: true
+```
+
+Apply the restore resource.
+```
+oc apply -f resources/example-restore.yaml
+```
+
+When the restore is completed you should see the following line in the Velero logs:
+```
+time="2021-06-16T07:52:04Z" level=info msg="restore completed" logSource="pkg/controller/restore_controller.go:480" restore=oadp-operator/restore
+```
+
 ## Links
 - https://access.redhat.com/articles/5456281
 - https://www.openshift.com/blog/hybrid-cloud-disaster-recovery-on-openshift
