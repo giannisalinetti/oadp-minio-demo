@@ -1,9 +1,19 @@
 # OADP + Minio Demo
-
 A demo repository to show how OADP works with a generic S3 backend (Minio).
-The purpose of this demo is purely to showcase the features of OADP using a simple
-backend during labs and workshops.
 
+The purpose of this demo is purely to showcase the features of OADP using a simple
+backend during labs and workshops on a single cluster.
+
+The demo installs OADP and Minio, creates an example namespace and show the 
+backup and restore tasks.
+The choice of Minio as an S3 backend is dictated by the will to keep the demo
+as simple and minimal as possibile. 
+
+OpenShift users who already installed [ODF](https://www.redhat.com/it/technologies/cloud-computing/openshift-container-storage) 
+(OpenShift Data Foundation, aka OpenShiftContainer Storage) can legerave
+on Noobaa as an S3 backend with improved performance and reliability results.
+
+### Technologies
 [OADP](https://github.com/konveyor/oadp-operator) (OpenShift APIs for Data Protection) 
 is an operator that Red Hat has created to create backup and restore APIs in the 
 OpenShift cluster. OADP is based on Velero.
@@ -11,6 +21,17 @@ OpenShift cluster. OADP is based on Velero.
 [MinIO](https://github.com/minio/minio) is a High Performance Object Storage which 
 is API compatible with Amazon S3 cloud storage service.
 
+[Helm](https://helm.sh/) is a package manager for Kubernetes.
+
+### Disclaimer for DR scenarios
+This demo is not intended to be a Disaster Recovery example between multiple 
+clusters. To achieve Async DR results the integrationwith other tools is necessary.
+Some integration examples:
+- ODF Data Protection
+- IBM Spectrum Protect Plus
+- Kasten K10
+- TrillioVault for Kubernetes
+- Bacula Enterprise
 
 ## Install OADP from the OpenShift Console
 Install the OADP Operator from the Openshift's OperatorHub. Search for the operator using keywords like `oadp` or `velero`
@@ -264,6 +285,7 @@ time="2021-06-16T07:52:04Z" level=info msg="restore completed" logSource="pkg/co
 ## Links
 - https://access.redhat.com/articles/5456281
 - https://www.openshift.com/blog/hybrid-cloud-disaster-recovery-on-openshift
+- https://www.redhat.com/en/resources/openshift-data-foundation-overview
 
 ## Maintainers
 Gianni Salinetti <gsalinet@redhat.com>  
